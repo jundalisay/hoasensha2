@@ -1,9 +1,13 @@
 <script lang="ts">
+
+    import { t } from "svelte-i18n";
+    
     import { Badge } from "$lib/components/ui/badge";
     import { Button } from "$lib/components/ui/button";
     import { ArrowRight } from "lucide-svelte";
     import { mode } from "mode-watcher";
     import { onMount } from 'svelte';
+    import Youtube from '$lib/components/ui/Youtube.svelte';
 
     let imageSrc = 'hero-image-light.jpg';
     
@@ -22,28 +26,31 @@
         <div class="text-center space-y-8">
             <Badge variant="outline" class="text-sm py-2">
                 <span class="mr-2 text-primary">
-                    <Badge>New</Badge>
+                    <Badge>{$t('hero.b1')}</Badge>
                 </span>
-                <span>New schedule for 2025!</span>
+                <span>{$t('hero.b2')}</span>
             </Badge>
 
             <div
                 class="max-w-screen-md mx-auto text-center text-5xl md:text-6xl font-bold"
             >
                 <h1>
-                    Experience 
                     <span
                         class="text-transparent bg-gradient-to-r from-[#D247BF] to-primary bg-clip-text"
                     >
                         Yoga
                     </span>
-                    in Saigon
+                    {$t('hero.insaigon')}
                 </h1>
+
             </div>
+
+<Youtube videoId="pydpm4w9yvk" />
 
             <p class="max-w-screen-sm mx-auto text-xl text-muted-foreground">
                 We're a yoga studio in Saigon.
             </p>
+
 
             <div class="space-y-4 md:space-y-0 md:space-x-4">
                 <Button class="w-5/6 md:w-1/4 font-bold group/arrow">
@@ -69,10 +76,6 @@
             <div
                 class="absolute -top-6 right-12 w-[90%] h-12 lg:h-[80%] bg-primary/50 blur-3xl rounded-full img-shadow-animation"
             ></div>
-
-
-<iframe width="560" height="315" src="https://www.youtube.com/embed/pydpm4w9yvk?si=mAe0QsgbyADoHui6" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-
 
 <!--             <img
                 class="w-full md:w-[1200px] mx-auto rounded-lg relative rouded-lg leading-none flex items-center border border-t-2 border-t-primary/30 img-border-animation"

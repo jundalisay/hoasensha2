@@ -3,7 +3,15 @@
 	import { siteConfig } from "$lib/config/meta";
 	import "../app.css";
 	let { children } = $props();
+	
+	  import "$lib/i18n"; // 👈 important!
+	  import { t } from "svelte-i18n";
 </script>
+
+
+
+
+
 
 <svelte:head>
 	<title>{siteConfig.name}</title>

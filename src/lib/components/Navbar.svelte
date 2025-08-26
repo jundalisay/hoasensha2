@@ -1,5 +1,5 @@
 <script lang="ts">
-  import {
+   import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
@@ -19,22 +19,22 @@
   import GithubIcon from "$lib/icons/GithubIcon.svelte";
   import ToggleTheme from "$lib/components/ToggleTheme.svelte";
 
-  interface RouteProps {
-    href: string;
-    label: string;
-  }
+  // The data can now be simplified as it will be mapped from the JSON files
+  const routeKeys: string[] = ["testimonials", "team", "contact", "faq"];
+  const featureKeys: string[] = ["showcase", "trust", "leads"];
+
+  let isOpen = false;
+
+
+  // interface RouteProps {
+  //   href: string;
+  //   label: string;
+  // }
 
   interface FeatureProps {
     title: string;
     description: string;
   }
-
-  const routeList: RouteProps[] = [
-    { href: "#testimonials", label: "Testimonials" },
-    { href: "#team", label: "Team" },
-    { href: "#contact", label: "Contact" },
-    { href: "#faq", label: "FAQ" },
-  ];
 
   const featureList: FeatureProps[] = [
     {
@@ -51,8 +51,29 @@
     },
   ];
 
-  let isOpen = false;
+  import { t } from "svelte-i18n";
+
+  type RouteProps = { href: string; key: string };
+
+  const routeList: RouteProps[] = [
+    { href: "#testimonials", key: "nav.testimonials" },
+    { href: "#team", key: "nav.team" },
+    { href: "#contact", key: "nav.contact" },
+    { href: "#faq", key: "nav.faq" },
+  ];
+
+import { locale, waitLocale } from "svelte-i18n";
+import { browser } from "$app/environment";
+
+async function changeLocale(lang: string) {
+  locale.set(lang);
+  await waitLocale(); // ensures dictionary is ready
+  if (browser) {
+    localStorage.setItem("locale", lang);
+  }
+}
 </script>
+
 
 <header
   class="w-[90%] md:w-[70%] lg:w-[75%] lg:max-w-screen-xl top-5 mx-auto sticky border z-40 rounded-2xl flex justify-between items-center p-2 bg-card shadow-md dark:shadow-dark shadow-light"
@@ -82,13 +103,20 @@
           </SheetHeader>
 
           <div class="flex flex-col gap-2">
-            {#each routeList as { href, label }}
+
+  {#each routeList as route}
+    <a href={route.href} class="px-4">
+      {$t(route.key)}
+    </a>
+  {/each}
+         
+<!--             {#each routeList as { href, label }}
               <a on:click={() => (isOpen = false)} {href}>
                 <Button variant="ghost" class="justify-start text-base w-full">
                   {label}
                 </Button>
               </a>
-            {/each}
+            {/each} -->
           </div>
         </div>
 
@@ -99,6 +127,9 @@
       </SheetContent>
     </Sheet>
   </div>
+
+
+
   <div class="hidden lg:flex items-center gap-1">
     <DropdownMenu>
       <DropdownMenuTrigger class={`${buttonVariants({ variant: "ghost", size: "default" })} text-base`}>
@@ -112,6 +143,19 @@
             class="h-full w-full rounded-md object-cover"
           />
           <ul class="flex flex-col gap-2">
+             {#each featureKeys as key}
+              <DropdownMenuItem class="rounded-md p-3 text-sm cursor-pointer">
+                <div>
+                  <p class="mb-1 font-semibold leading-none text-foreground">
+                    {$t(`features.${key}.title`)}
+                  </p>
+                  <p class="line-clamp-2 text-muted-foreground">
+                    {$t(`features.${key}.description`)}
+                  </p>
+                </div>
+              </DropdownMenuItem>
+            {/each}
+
             {#each featureList as { title, description }}
               <DropdownMenuItem class="rounded-md p-3 text-sm cursor-pointer">
                 <div>
@@ -130,24 +174,28 @@
     </DropdownMenu>
 
     <!-- Navigation Links -->
-    {#each routeList as { href, label }}
-      <a {href} class={buttonVariants({ variant: "ghost", size: "default" })}>
-        {label}
+      {#each routeList as route}
+    <a href={route.href} class="px-4">
+      {$t(route.key)}
+    </a>
+  {/each}
+<!--         {#each routeKeys as key}
+      <a href={`#${key}`} class={buttonVariants({ variant: "ghost", size: "default" })}>
+        {$t(`nav.${key}`)}
       </a>
-    {/each}
+    {/each} -->
   </div>
 
   <div class="hidden lg:flex">
+
+<!-- Language Switcher -->
+
+<button class="px-4" on:click={() => changeLocale('en')}>Emglish</button>
+ 
+<button on:click={() => changeLocale('vi')}>Tieng Viet</button>
+
     <ToggleTheme />
-    <Button size="sm" variant="ghost" aria-label="View on GitHub">
-      <a
-        aria-label="View on GitHub"
-        href="https://github.com/zxce3/shadcn-sveltekit-landing-page.git"
-        target="_blank"
-      >
-        <GithubIcon class_="size-5" />
-      </a>
-    </Button>
+
   </div>
 </header>
 
